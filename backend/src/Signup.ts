@@ -1,6 +1,8 @@
 import AccountDAO from "./AccountDAO";
 import { validateCpf } from "./validateCpf";
 import { validatePassword } from "./validatePassword";
+import * as crypto from "crypto";
+
 
 export default class Signup {
 

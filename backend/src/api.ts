@@ -1,9 +1,13 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-import { deposit, getOrder, placeOrder, withdraw } from "./application";
+import { getOrder } from "./application";
 import Signup from "./Signup";
 import { AccountDAODatabase } from "./AccountDAO";
 import GetAccount from "./GetAccount";
+import Deposit from "./Deposit";
+import Withdraw from "./Withdraw";
+import PlaceOrder from "./PlaceOrder";
+import { OrderDAODatabase } from "./OrderDAO";
 
 // Driver
 
@@ -12,8 +16,14 @@ app.use(express.json());
 app.use(cors());
 
 const accountDAO = new AccountDAODatabase();
+const orderDAO = new OrderDAODatabase();
+
 const signup = new Signup(accountDAO);
 const getAccount = new GetAccount(accountDAO);
+const deposit = new Deposit(accountDAO);
+const withdraw = new Withdraw(accountDAO);
+const placeOrder = new PlaceOrder(orderDAO);
+
 
 app.post("/signup", async (req: Request, res: Response) => {
     try {
@@ -29,14 +39,14 @@ app.post("/signup", async (req: Request, res: Response) => {
 
 app.post("/deposit", async (req: Request, res: Response) => {
     const input = req.body;
-    await deposit(input);
+    await deposit.execute(input)
     res.end();
 });
 
 app.post("/withdraw", async (req: Request, res: Response) => {
     try {
         const input = req.body;
-        await withdraw(input);
+        await withdraw.execute(input);
         res.end();
     } catch (e: any) {
         res.status(422).json({
@@ -47,8 +57,9 @@ app.post("/withdraw", async (req: Request, res: Response) => {
 
 app.post("/place_order", async (req: Request, res: Response) => {
     const input = req.body;
-    const output = await placeOrder(input);
+    const output = await placeOrder.execute(input);
     res.json(output);
+    res.end();
 });
 
 app.get("/orders/:orderId", async (req: Request, res: Response) => {

@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "docker:start": "docker compose up -d",
-    "docker:stop": "docker compose stop",
-    "docker:clean": "docker compose rm -fsv"
+    "docker:start": "sudo docker compose up",
+    "docker:stop": "sudo docker compose stop",
+    "docker:clean": "sudo docker compose rm -fsv"
   }
 }
